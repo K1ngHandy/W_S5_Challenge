@@ -12,7 +12,26 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   let mentors = [] // fix this
   let learners = [] // fix this
 
-  
+  const fetch = () => {
+    axios.get('http://localhost:3003/api/mentors')
+      .then(res => {
+        const data = res.data;
+        mentors = data;
+        console.log('Mentors:', data);
+      })
+      .catch(error => console.error('Error:', error))
+      .finally(() => console.log('Mentors Finished'))
+
+    axios.get('http://localhost:3003/api/learners')
+      .then((res) => {
+        const data = res.data;
+        learners = data;
+        console.log('Learners:', learners);
+      })
+      .catch(error => console.error('Error:', error))
+      .finally(() => console.log('Learners Finished'));
+  }
+  fetch();
 
   // 👆 ==================== TASK 1 END ====================== 👆
 
