@@ -12,26 +12,26 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   let mentors = [] // fix this
   let learners = [] // fix this
 
-  const fetch = () => {
-    axios.get('http://localhost:3003/api/mentors')
-      .then(res => {
-        const data = res.data;
-        mentors = data;
-        console.log('Mentors:', data);
-      })
-      .catch(error => console.error('Error:', error))
-      .finally(() => console.log('Mentors Finished'))
-
-    axios.get('http://localhost:3003/api/learners')
-      .then((res) => {
-        const data = res.data;
-        learners = data;
-        console.log('Learners:', learners);
-      })
-      .catch(error => console.error('Error:', error))
-      .finally(() => console.log('Learners Finished'));
+  const fetchMentors = async () => {
+    try {
+      const res = await axios.get('http://localhost:3003/api/mentors')
+        mentors.push(...res.data);
+    } catch(error) {
+      console.error('Error:', error)
+    } finally {
+      console.log('Mentors Fetched')
+    }
   }
-  fetch();
+  const fetchLearners = async () => {
+    try {
+      const res = await axios.get('http://localhost:3003/api/learners')
+        learners.push(...res.data);
+    } catch(error) { 
+      console.error('Error:', error)
+    } finally { 
+      console.log('Learners Fetched')
+    }
+  }
 
   // 👆 ==================== TASK 1 END ====================== 👆
 
@@ -49,6 +49,14 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   //     "Grace Hopper"
   //   ]`
   // }
+
+  const combineArr = async () => {
+    await Promise.all([ fetchMentors(), fetchLearners() ]);
+    learners.forEach(learner => {
+      console.log('Learner Mentor IDs:', learner.mentors);
+    })
+  }
+  combineArr();
 
   // 👆 ==================== TASK 2 END ====================== 👆
 
