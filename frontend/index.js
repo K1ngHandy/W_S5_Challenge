@@ -17,9 +17,9 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
       const res = await axios.get('http://localhost:3003/api/mentors')
         mentors.push(...res.data);
     } catch(error) {
-      console.error('Error:', error)
+      console.error('Error:', error);
     } finally {
-      console.log('Mentors Fetched')
+      console.log('Mentors Fetched');
     }
   }
   const fetchLearners = async () => {
@@ -27,9 +27,9 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
       const res = await axios.get('http://localhost:3003/api/learners')
         learners.push(...res.data);
     } catch(error) { 
-      console.error('Error:', error)
+      console.error('Error:', error);
     } finally { 
-      console.log('Learners Fetched')
+      console.log('Learners Fetched');
     }
   }
 
@@ -52,10 +52,24 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
 
   const combineArr = async () => {
     await Promise.all([ fetchMentors(), fetchLearners() ]);
-    learners.forEach(learner => {
-      console.log('Learner Mentor IDs:', learner.mentors);
-    })
-  }
+    
+    const updatedArr = learners.map(learner => {
+      const mentorNames = learner.mentors.map(mentorID => {
+        const mentor = mentors.find(mentor => mentor.id === mentorID);
+        return mentor ? `${mentor.firstName} ${mentor.lastName}` : `Unknown: ${mentorID}`;
+      });
+
+      return {
+        id: learner.id,
+        fullName: learner.fullName,
+        email: learner.email,
+        mentors: mentorNames
+      };
+    });
+    
+    console.log('Updated Arr:', updatedArr);
+    return updatedArr;
+  };
   combineArr();
 
   // 👆 ==================== TASK 2 END ====================== 👆
