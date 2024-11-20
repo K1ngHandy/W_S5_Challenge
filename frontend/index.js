@@ -53,30 +53,26 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   const combineArr = async () => {
     await Promise.all([ fetchMentors(), fetchLearners() ]);
     
-    const updatedArr = learners.map(learner => {
+    learners = learners.map(learner => {
       const mentorNames = learner.mentors.map(mentorID => {
         const mentor = mentors.find(mentor => mentor.id === mentorID);
         return mentor ? `${mentor.firstName} ${mentor.lastName}` : `Unknown: ${mentorID}`;
       });
 
       return {
-        id: learner.id,
-        fullName: learner.fullName,
-        email: learner.email,
+        ...learner,
         mentors: mentorNames
       };
     });
-    
-    console.log('Updated Arr:', updatedArr);
-    return updatedArr;
   };
-  combineArr();
+
+  await combineArr(); // wait for learners to fetch and combine
 
   // 👆 ==================== TASK 2 END ====================== 👆
 
   const cardsContainer = document.querySelector('.cards')
   const info = document.querySelector('.info')
-  info.textContent = 'No learner is selected'
+  // info.textContent = 'No learner is selected'
 
 
   // 👇 ==================== TASK 3 START ==================== 👇
@@ -95,6 +91,20 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
     const email = document.createElement('div')
     const mentorsHeading = document.createElement('h4')
     const mentorsList = document.createElement('ul')
+
+    card.classList.add('cards');
+    heading.textContent = learner.fullName;
+    email.textContent = learner.email;
+    mentorsHeading.classList.add('closed');
+    mentorsHeading.textContent = "Mentors";
+    
+    learner.mentors.forEach(mentor => {
+      const mentorItem = document.createElement('li');
+      mentorItem.textContent = mentor;
+      mentorsList.appendChild(mentorItem);
+    })
+
+    card.append(heading, email, mentorsHeading);
 
     // 👆 ==================== TASK 3 END ====================== 👆
 
