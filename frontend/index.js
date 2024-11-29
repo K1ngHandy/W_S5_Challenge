@@ -16,8 +16,6 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   console.log(status.textContent);
 
   const fetchMentors = async () => {
-    status.textContent = 'Fetching learner cards...';
-
     try {
       const res = await axios.get('http://localhost:3003/api/mentors')
         mentors.push(...res.data);
@@ -28,6 +26,8 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
     }
   }
   const fetchLearners = async () => {
+    status.textContent = 'Fetching learner cards...';
+    
     try {
       const res = await axios.get('http://localhost:3003/api/learners')
         learners.push(...res.data);
@@ -56,7 +56,6 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   // }
 
   const combineArr = async () => {
-    
     await Promise.all([ fetchMentors(), fetchLearners() ]);
     status.textContent = 'No learner is selected';
     
