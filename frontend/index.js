@@ -12,7 +12,12 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   let mentors = [] // fix this
   let learners = [] // fix this
 
+  const status = document.querySelector('p');
+  console.log(status.textContent);
+
   const fetchMentors = async () => {
+    status.textContent = 'Fetching learner cards...';
+
     try {
       const res = await axios.get('http://localhost:3003/api/mentors')
         mentors.push(...res.data);
@@ -51,7 +56,9 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   // }
 
   const combineArr = async () => {
+    
     await Promise.all([ fetchMentors(), fetchLearners() ]);
+    status.textContent = 'No learner is selected';
     
     learners = learners.map(learner => {
       const mentorNames = learner.mentors.map(mentorID => {
@@ -72,7 +79,6 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
 
   const cardsContainer = document.querySelector('.cards')
   const info = document.querySelector('.info')
-  // info.textContent = 'No learner is selected'
 
 
   // 👇 ==================== TASK 3 START ==================== 👇
